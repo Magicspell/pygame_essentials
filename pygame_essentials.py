@@ -1,6 +1,6 @@
 import pygame
 
-class Object():
+class Object:
     def __init__(self, type, loc, color, radius = None, height = None, width = None):
         if type == 'square' or type == 's':
             self.type = 's'
@@ -59,7 +59,64 @@ class Object():
         for force in self.forces:
             self.move(force[0], force[1])
 
-class Ray():
+class ThreeDimObject:
+    def __init__(self, type, loc, color, radius = None, height = None, width = None):
+        if type == 'square' or type == 's':
+            self.type = 's'
+            self.radius = radius
+        if type == 'circle' or type == 'c':
+            self.type = 'c'
+            self.radius = radius
+        if type == 'rectangle' or type =='r':
+            self.type = 'r'
+            self.width = width
+            self.height = height
+        self.x = loc[0]
+        self.y = loc[1]
+        self.z = loc[2]
+        self.color = color
+    def draw(self, screen):
+        size_modifyer = self._maprange((-50,50), (0,2), self.z)
+        if self.type == 's':
+            rect = pygame.Rect(self.x - (self.radius * size_modifyer), self.y-(self.radius * size_modifyer), self.radius * 2 * size_modifyer, self.radius * 2 * size_modifyer)
+            pygame.draw.rect(screen, self.color, rect)
+        if self.type == 'c':
+            pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius * size_modifyer)
+        if self.type == 'r':
+            rect = pygame.Rect((self.x - self.width * size_modifyer/2), (self.y - self.height * size_modifyer/2), self.width * size_modifyer, self.height * size_modifyer)
+            pygame.draw.rect(screen, self.color, rect)
+    def _maprange(self, a, b, s):
+        (a1, a2), (b1, b2) = a, b
+        return b1 + ((s - a1) * (b2 - b1) / (a2 - a1))
+    def is_touching(self, other):
+        if self.type == 's' or self.type == 'c':
+            self_max_x = self.x + self.radius
+            self_min_x = self.x - self.radius
+            self_max_y = self.y + self.radius
+            self_min_y = self.y - self.radius
+        else:
+            self_max_x = self.x + self.width/2
+            self_min_x = self.x - self.width/2
+            self_max_y = self.y + self.height/2
+            self_min_y = self.y - self.height/2
+        if other.type == 's' or other.type == 'c':
+            other_max_x = other.x + other.radius
+            other_min_x = other.x - other.radius
+            other_max_y = other.y + other.radius
+            other_min_y = other.y - other.radius
+        else:
+            other_max_x = other.x + other.width/2
+            other_min_x = other.x - other.width/2
+            other_max_y = other.y + other.height/2
+            other_min_y = other.y - other.height/2
+            
+        right_side = self_max_x > other_min_x and self_min_x < other_max_x
+        left_side = self_min_x > other_min_x and self_max_x < other_max_x
+        top_side = self_max_y > other_min_y and self_min_y < other_max_y
+        bottom_side = self_min_y > other_min_y and self_max_y < other_max_y
+        return (right_side or left_side) and (top_side or bottom_side)
+
+class Ray:
     def __init__(self, start_point, end_point, colliding_obstacle, obstacles):
         self.start_point = start_point
         self.end_point = end_point
@@ -103,7 +160,7 @@ class Ray():
             cur_x += x_change
             cur_y += y_change
 
-class Light():
+class Light:
     def __init__(self, surface, loc, obstacles, raynum=100, brightness=255, color=(255,255,255)):
         self.surface = surface
         self.loc = loc
