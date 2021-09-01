@@ -1,4 +1,5 @@
 import pygame
+import math
 
 class Object:
     def __init__(self, type, loc, color, radius = None, height = None, width = None):
@@ -83,7 +84,7 @@ class ThreeDimObject:
         if self.type == 'c':
             pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius * size_modifyer)
         if self.type == 'r':
-            rect = pygame.Rect((self.x - self.width * size_modifyer/2), (self.y - self.height * size_modifyer/2), self.width * size_modifyer, self.height * size_modifyer)
+            rect = pygame.Rect((self.x - self.width * size_modifyer/2), (self.y - self.height * size_modifyer/2), self.width, self.height)
             pygame.draw.rect(screen, self.color, rect)
     def _maprange(self, a, b, s):
         (a1, a2), (b1, b2) = a, b
@@ -208,3 +209,34 @@ class Light:
             self.rays.append(ray)
             ray.cast(self.loc, (0,h*(self.height//self.raynum)))
             h -= 1
+
+class Vector():
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+    def add(self, vector):
+        v = Vector(self.x + vector.x, self.y + vector.y)
+        return v
+    def sub(self, vector):
+        v = Vector(self.x - vector.x, self.y - vector.y)
+        return v
+    def mult(self, num):
+        v = Vector(self.x * num, self.y * num)
+        return v
+    def mag(self):
+        return math.sqrt((self.x**2)+(self.y**2))
+    def normalize(self):
+        if self.mag():
+            tempx = self.x / self.mag()
+            tempy = self.y / self.mag()
+            self.x = tempx
+            self.y = tempy
+    def limit(self, max):
+        if self.x > max:
+            self.x = max
+        if self.x < -1 * max:
+            self.x = -1 * max
+        if self.y > max:
+            self.y= max
+        if self.y < -1 * max:
+            self.y = -1 * max
