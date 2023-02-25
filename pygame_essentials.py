@@ -60,6 +60,15 @@ class Object:
         for force in self.forces:
             self.move(force[0], force[1])
 
+class Line:
+    def __init__(self, start_loc, end_loc, color, thickness) -> None:
+        self.start_loc = start_loc
+        self.end_loc = end_loc
+        self.color = color
+        self.thickness = thickness
+    def draw(self, screen) -> None:
+        pygame.draw.line(screen, self.color, self.start_loc, self.end_loc)
+    
 class ThreeDimObject:
     def __init__(self, type, loc, color, radius = None, height = None, width = None):
         if type == 'square' or type == 's':
