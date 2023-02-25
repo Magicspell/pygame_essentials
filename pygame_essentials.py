@@ -67,7 +67,7 @@ class Line:
         self.color = color
         self.thickness = thickness
     def draw(self, screen) -> None:
-        pygame.draw.line(screen, self.color, self.start_loc, self.end_loc)
+        pygame.draw.line(screen, self.color, self.start_loc, self.end_loc, width=self.thickness)
     
 class ThreeDimObject:
     def __init__(self, type, loc, color, radius = None, height = None, width = None):
