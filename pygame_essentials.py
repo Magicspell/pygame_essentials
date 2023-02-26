@@ -1,6 +1,8 @@
 import pygame
 import math
 
+pygame.init()
+
 class Object:
     def __init__(self, type, loc, color, radius = None, height = None, width = None):
         if type == 'square' or type == 's':
