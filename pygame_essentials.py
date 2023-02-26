@@ -73,7 +73,7 @@ class Line:
 
 class Text:
     def __init__(self, text, loc, font = pygame.font.Font('freesansbold.ttf', 32), color = (0,0,0)) -> None:
-        self.text = loc
+        self.text = text
         self.loc = loc
         self.font = font
         self.color = color
