@@ -78,8 +78,10 @@ class Text:
         self.font = font
         self.color = color
     def draw(self, screen):
-        drawable_text = self.font.render(self.text, True, self.color)
-        screen.blit(drawable_text, self.loc)
+        text_rect = self.font.render(self.text, True, self.color)
+        x = self.loc[0] - text_rect.get_width() / 2
+        y = self.loc[1] - text_rect.get_height() / 2
+        screen.blit(text_rect, (x, y))
 class ThreeDimObject:
     def __init__(self, type, loc, color, radius = None, height = None, width = None):
         if type == 'square' or type == 's':
