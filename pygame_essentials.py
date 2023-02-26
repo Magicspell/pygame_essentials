@@ -68,7 +68,16 @@ class Line:
         self.thickness = thickness
     def draw(self, screen) -> None:
         pygame.draw.line(screen, self.color, self.start_loc, self.end_loc, width=self.thickness)
-    
+
+class Text:
+    def __init__(self, text, loc, font = pygame.font.Font('freesansbold.ttf', 32), color = (0,0,0)) -> None:
+        self.text = loc
+        self.loc = loc
+        self.font = font
+        self.color = color
+    def draw(self, screen):
+        drawable_text = self.font.render(self.text, True, self.color)
+        screen.blit(drawable_text, self.loc)
 class ThreeDimObject:
     def __init__(self, type, loc, color, radius = None, height = None, width = None):
         if type == 'square' or type == 's':
